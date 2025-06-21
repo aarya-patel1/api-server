@@ -58,3 +58,20 @@ app.post('/api/tasks', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
+// app.js (existing PUT route)
+app.put('/api/tasks/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { title, description, completed } = req.body;
+        
+        await db.query(
+            'UPDATE tasks SET title = ?, description = ?, completed = ? WHERE id = ?',
+            [title, description, completed, id]
+        );
+        
+        const [task] = await db.query('SELECT * FROM tasks WHERE id = ?', [id]);
+        res.json(task[0]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});

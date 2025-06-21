@@ -1,112 +1,161 @@
-/* Base Styles */
+/* Lavender Theme */
+:root {
+    --lavender-primary: #967bb6;
+    --lavender-secondary: #b399d4;
+    --lavender-light: #e6e6fa;
+    --lavender-dark: #6a5acd;
+    --text-color: #4b4b4b;
+}
+
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f5f5;
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    color: #333;
+    background-color: var(--lavender-light);
+    color: var(--text-color);
 }
 
 .app-container {
-    max-width: 500px;
+    max-width: 1200px;
     margin: 0 auto;
-    background: white;
-    min-height: 100vh;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
-}
-
-/* Lavender Color Scheme */
-header {
-    background-color: #e6e6fa; /* Light lavender */
     padding: 20px;
-    text-align: center;
-    border-bottom: 1px solid #d8bfd8; /* Thistle border */
 }
 
-.task {
-    border-left: 4px solid #9370db; /* Medium lavender */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    color: var(--lavender-dark);
+    margin-bottom: 5px;
+}
+
+#current-time {
+    color: var(--lavender-primary);
+    font-size: 1.2em;
+}
+
+/* Two Column Layout */
+.columns-container {
+    display: flex;
+    gap: 30px;
+}
+
+.form-column, .list-column {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Form Styles */
+#task-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#task-form h2, .list-column h2 {
+    color: var(--lavender-dark);
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--lavender-light);
+}
+
+#task-title, #task-description {
+    padding: 12px;
+    border: 1px solid var(--lavender-secondary);
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: rgba(150, 123, 182, 0.05);
+}
+
+#task-title {
+    height: 40px;
+}
+
+#task-description {
+    min-height: 100px;
+    resize: vertical;
 }
 
 #task-form button {
-    background-color: #9370db; /* Medium lavender */
+    background: var(--lavender-primary);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
 }
 
 #task-form button:hover {
-    background-color: #8a2be2; /* Blue violet */
-}
-
-/* Header Styles */
-.time-display {
-    position: absolute;
-    left: 20px;
-    top: 20px;
-    font-size: 14px;
-    color: #666;
-}
-
-h1 {
-    margin: 0;
-    font-size: 24px;
-    color: #4b0082; /* Indigo */
+    background: var(--lavender-dark);
+    transform: translateY(-2px);
 }
 
 /* Task List Styles */
-.tasks-container {
-    padding: 20px;
-}
-
-.task {
-    background: white;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-.task h3 {
-    margin: 0 0 5px 0;
-    font-size: 16px;
-    color: #4b0082; /* Indigo */
-}
-
-.task p {
-    margin: 0;
-    color: #666;
-    font-size: 14px;
-}
-
-/* Add Task Form */
-.add-task-form {
-    padding: 20px;
-    background: #f5f5f5;
-    border-top: 1px solid #eee;
-}
-
-.add-task-form h2 {
-    margin-top: 0;
-    font-size: 18px;
-    color: #4b0082; /* Indigo */
-}
-
-#task-form {
+#task-list {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-#task-form input {
+.task-item {
+    display: flex;
+    align-items: center;
     padding: 12px;
-    border: 1px solid #d8bfd8; /* Thistle */
-    border-radius: 6px;
-    font-size: 14px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border-left: 4px solid var(--lavender-primary);
 }
 
-#task-form button {
-    padding: 12px;
+.task-item.completed {
+    background-color: rgba(150, 123, 182, 0.1);
+}
+
+.task-item.completed .task-content h3 {
+    text-decoration: line-through;
+    color: var(--lavender-primary);
+    opacity: 0.7;
+}
+
+.task-content {
+    flex-grow: 1;
+}
+
+.complete-checkbox {
+    margin-right: 12px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--lavender-primary);
+    cursor: pointer;
+}
+
+.delete-btn {
+    background: var(--lavender-secondary);
     color: white;
     border: none;
-    border-radius: 6px;
-    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.2s;
+    margin-left: 10px;
+}
+
+.delete-btn:hover {
+    background: var(--lavender-dark);
+    transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .columns-container {
+        flex-direction: column;
+    }
 }

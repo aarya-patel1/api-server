@@ -3,31 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App</title>
+    <title>ToDo</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app-container">
         <header>
-            <div class="time-display" id="current-time"></div>
-            <h1>TODO APP</h1>
+            <h1>The To-Do List</h1>
+            <div id="current-time"></div>
         </header>
-
-        <main>
-            <div class="tasks-container" id="task-list">
-                <!-- Tasks will be dynamically inserted here -->
-            </div>
-
-            <div class="add-task-form">
-                <h2>Add Task</h2>
+        
+        <div class="columns-container">
+            <!-- Left Column - Add Task Form -->
+            <div class="form-column">
                 <form id="task-form">
-                    <input type="text" id="task-title" placeholder="Title" required>
-                    <input type="text" id="task-description" placeholder="Detail">
-                    <button type="submit">ADD</button>
+                    <h2>Add New Task</h2>
+                    <input type="text" id="task-title" placeholder="Task title" required>
+                    <textarea id="task-description" placeholder="Description (optional)"></textarea>
+                    <button type="submit">Add Task</button>
                 </form>
             </div>
-        </main>
+            
+            <!-- Right Column - Task List -->
+            <div class="list-column">
+                <h2>Your Tasks</h2>
+                <div id="task-list"></div>
+            </div>
+        </div>
     </div>
+    
     <script src="script.js"></script>
 </body>
 </html>
