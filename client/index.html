@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="time-display" id="current-time"></div>
+            <h1>TODO APP</h1>
+        </header>
+
+        <main>
+            <div class="tasks-container" id="task-list">
+                <!-- Tasks will be dynamically inserted here -->
+            </div>
+
+            <div class="add-task-form">
+                <h2>Add Task</h2>
+                <form id="task-form">
+                    <input type="text" id="task-title" placeholder="Title" required>
+                    <input type="text" id="task-description" placeholder="Detail">
+                    <button type="submit">ADD</button>
+                </form>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
