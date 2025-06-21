@@ -1,45 +1,94 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const { Sequelize, DataTypes } = require('sequelize');
+
 const app = express();
-const port = 3000;
+app.use(cors());
+app.use(bodyParser.json());
 
-app.use(express.json());
-
-const db = new sqlite3.Database(':memory:');
-db.serialize(() => {
-  db.run("CREATE TABLE items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT)");
+// Setup Sequelize connection
+const sequelize = new Sequelize('task_manager', 'root', '11july2011', {
+  host: 'localhost',
+  dialect: 'mysql',
 });
 
-app.post('/items', (req, res) => {
-  const { name, description } = req.body;
-  db.run("INSERT INTO items (name, description) VALUES (?, ?)", [name, description], function(err) {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ id: this.lastID, name, description });
-  });
+
+// Define Task model
+const Task = sequelize.define('Task', {
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.TEXT,
+  },
+  status: {
+    type: DataTypes.STRING,
+    defaultValue: 'pending',
+  },
 });
 
-app.get('/items', (req, res) => {
-  db.all("SELECT * FROM items", [], (err, rows) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(rows);
-  });
+// Sync models with database
+sequelize.sync()
+  .then(() => console.log('Database & tables created!'))
+  .catch(console.error);
+
+app.get('/', (req, res) => {
+  res.send('Task Manager API is running');
 });
 
-app.put('/items/:id', (req, res) => {
-  const { name, description } = req.body;
-  db.run("UPDATE items SET name = ?, description = ? WHERE id = ?", [name, description, req.params.id], function(err) {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ message: 'Item updated' });
-  });
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// GET /tasks - get all tasks
+app.get('/tasks', async (req, res) => {
+  try {
+    const tasks = await Task.findAll();
+    res.json(tasks);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-app.delete('/items/:id', (req, res) => {
-  db.run("DELETE FROM items WHERE id = ?", [req.params.id], function(err) {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ message: 'Item deleted' });
-  });
+// POST /tasks - create a task
+app.post('/tasks', async (req, res) => {
+  try {
+    const { title, description, status } = req.body;
+    const newTask = await Task.create({ title, description, status });
+    res.status(201).json(newTask);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+// PUT /tasks/:id - update task by ID
+app.put('/tasks/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, status } = req.body;
+    const task = await Task.findByPk(id);
+    if (!task) return res.status(404).json({ error: 'Task not found' });
+
+    task.title = title ?? task.title;
+    task.description = description ?? task.description;
+    task.status = status ?? task.status;
+
+    await task.save();
+    res.json(task);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// DELETE /tasks/:id - delete task by ID
+app.delete('/tasks/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await Task.destroy({ where: { id } });
+    if (!deleted) return res.status(404).json({ error: 'Task not found' });
+    res.json({ message: 'Task deleted' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
